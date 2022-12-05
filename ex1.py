@@ -1,37 +1,31 @@
-# Basic framework
-
-def simple_middleware(get_response):
-    # One-time configuration and initialization.
-
-    def middleware(request):
-        # Code to be executed for each request before
-        # the view (and later middleware) are called.
-
-        response = get_response(request)
-
-        # Code to be executed for each request/response after
-        # the view is called.
-
-        return response
-
-    return middleware
 
 
-class ExampleMiddleware:
+# Django middleware class structure
+
+class CoffeehouseMiddleware:
 
     def __init__(self, get_response):
+        # One-time configuration and initialization on start-up
         self.get_response = get_response
-        # One-time configuration and initialization.
-        
 
     def __call__(self, request):
         # Logic executed on a request before the view (and other middleware) is called.
         # get_response call triggers next phase
-        # Code to be executed for each request before
-        # the view (and later middleware) are called.
-
         response = self.get_response(request)
-
-        # Code to be executed for each request/response after the view is called.
+        # Logic executed on response after the view is called.
         # Return response to finish middleware sequence
         return response
+
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        # Logic executed before a call to view
+        #  Gives access to the view itself & arguments
+        pass
+
+    def process_exception(self, request, exception):
+        # Logic executed if an exception/error occurs in the view
+        pass
+
+    def process_template_response(self, request, response):
+        # Logic executed after the view is called, #
+        # ONLY IF view response is TemplateResponse
+        pass
